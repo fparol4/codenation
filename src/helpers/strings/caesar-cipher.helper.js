@@ -34,8 +34,4 @@ class CaesarCipherHelper {
   }
 }
 
-const message = "helloworld";
-const ciphred = CaesarCipherHelper.encryptOrDecrypt(message, -7);
-const deciphred = CaesarCipherHelper.encryptOrDecrypt(message, 0);
-
 module.exports = CaesarCipherHelper;

@@ -1,37 +1,21 @@
 require("dotenv").config();
 
-/** Servies */
-const { AxiosService } = require("./services");
-
-/** Errors */
-const { MissingParamError } = require("./errors/app");
-
 /** Helpers */
-const { CaesarCipherHelper } = require("./helpers/strings");
+const { CaesarCipherHelper, SHA1Helper } = require("./helpers/strings");
 
-const axiosInstance = new AxiosService(
-  "https://api.codenation.dev/v1/challenge/dev-ps/"
-);
-
-const getGeneratedData = ({ request } = {}) => {
-  if (!request) {
-    throw new MissingParamError("requestInterface");
-  }
-
-  return request.get("generate-data", {
-    params: {
-      token: process.env.CODENATION_TOKEN
-    }
-  });
-};
+/** Factories */
+const { CodenationServiceFactory } = require("./factories");
 
 (async () => {
-  const generatedDataRequest = await getGeneratedData(axiosInstance);
-  const { data } = generatedDataRequest;
-  const { cifrado, numero_casas } = data;
-  const fixedGeneratedData = {
-    ...data,
-    decifrado: CaesarCipherHelper.encryptOrDecrypt(cifrado, -numero_casas)
+  const codenationService = CodenationServiceFactory.fabricate();
+  const codenationData = await codenationService.getGeneratedData();
+  const { cifrado, numero_casas } = codenationData;
+  const decrypted = CaesarCipherHelper.encryptOrDecrypt(cifrado, -numero_casas);
+  const sha1Resume = SHA1Helper.encrypt(decrypted);
+  const fixedCodenationData = {
+    ...codenationData,
+    decifrado: decrypted,
+    resumo_criptografico: sha1Resume
   };
-  console.log(fixedGeneratedData);
+  console.log(fixedCodenationData);
 })();
