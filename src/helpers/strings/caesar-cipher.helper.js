@@ -6,7 +6,7 @@ class CaesarCipherHelper {
     This method can be used to encrypt and decrypt a message based on alphabet
   */
 
-  static encryptOrDecrypt(str, shift) {
+  static encryptOrDecrypt(str, shift = 0) {
     if (typeof str !== "string") return "";
 
     const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -14,24 +14,28 @@ class CaesarCipherHelper {
     return str
       .toLowerCase()
       .split(" ")
-      .map(word =>
-        word
+      .map(word => {
+        return word
           .split("")
           .map(letter => {
-            const indexOfLetter = alphabet.indexOf(letter);
-            if (indexOfLetter) {
-              const limitedNumber = ExceedNumberHelper.exceed(
-                indexOfLetter + shift,
-                { max: alphabet.length }
+            const letterIndex = alphabet.indexOf(letter);
+            if (letterIndex !== -1) {
+              const exceededNumber = ExceedNumberHelper.exceed(
+                letterIndex + shift,
+                { min: 0, max: alphabet.length }
               );
-              return alphabet[limitedNumber];
+              return alphabet[exceededNumber];
             }
             return letter;
           })
-          .join("")
-      )
+          .join("");
+      })
       .join(" ");
   }
 }
+
+const message = "helloworld";
+const ciphred = CaesarCipherHelper.encryptOrDecrypt(message, -7);
+const deciphred = CaesarCipherHelper.encryptOrDecrypt(message, 0);
 
 module.exports = CaesarCipherHelper;

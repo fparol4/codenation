@@ -27,6 +27,11 @@ const getGeneratedData = ({ request } = {}) => {
 
 (async () => {
   const generatedDataRequest = await getGeneratedData(axiosInstance);
-  const { data: generatedData } = generatedDataRequest;
-  console.log(generatedData);
+  const { data } = generatedDataRequest;
+  const { cifrado, numero_casas } = data;
+  const fixedGeneratedData = {
+    ...data,
+    decifrado: CaesarCipherHelper.encryptOrDecrypt(cifrado, -numero_casas)
+  };
+  console.log(fixedGeneratedData);
 })();
