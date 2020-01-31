@@ -1,4 +1,4 @@
-class LimitNumberHelper {
+class ExceedNumberHelper {
   static exceed(number, { min = 0, max } = {}) {
     if (number >= min && number < max) {
       return number;
@@ -12,4 +12,4 @@ class LimitNumberHelper {
   }
 }
 
-module.exports = LimitNumberHelper;
+module.exports = ExceedNumberHelper;
