@@ -1,26 +1,32 @@
-require('dotenv').config()
+require("dotenv").config();
 
 /** Servies */
-const { AxiosService } = require('./services')
+const { AxiosService } = require("./services");
 
 /** Errors */
-const { MissingParamError } = require('./errors/app')
+const { MissingParamError } = require("./errors/app");
 
-const axiosInstance = new AxiosService('https://api.codenation.dev/v1/challenge/dev-ps/')
+/** Helpers */
+const { CaesarCipherHelper } = require("./helpers/strings");
+
+const axiosInstance = new AxiosService(
+  "https://api.codenation.dev/v1/challenge/dev-ps/"
+);
 
 const getGeneratedData = ({ request } = {}) => {
-    if (!request) {
-        throw new MissingParamError('requestInterface')
-    }
+  if (!request) {
+    throw new MissingParamError("requestInterface");
+  }
 
-    return request.get('generate-data', {
-        params: {
-            token: process.env.CODENATION_TOKEN
-        }
-    })
-}
+  return request.get("generate-data", {
+    params: {
+      token: process.env.CODENATION_TOKEN
+    }
+  });
+};
 
 (async () => {
-    const generatedDataRequest = await getGeneratedData(axiosInstance)
-    const { data: generatedData } = generatedDataRequest
-})()
+  const generatedDataRequest = await getGeneratedData(axiosInstance);
+  const { data: generatedData } = generatedDataRequest;
+  console.log(generatedData);
+})();
