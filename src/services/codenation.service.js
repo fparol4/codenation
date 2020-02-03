@@ -32,7 +32,7 @@ class CodenationService {
   }
 
   async sendFixedData(fixedData) {
-    await WriteJSONFileHelper.write("answer", JSON.stringify(fixedData));
+    await WriteJSONFileHelper.write("answer", fixedData);
     const formData = FormDataFactory.fabricate("answer", "answer.json");
 
     const request = await this.request
@@ -40,10 +40,10 @@ class CodenationService {
         params: {
           token: this.token
         },
-        headers: { ...formData.getHeaders() }
+        headers: formData.getHeaders()
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
       });
 
     return request;
